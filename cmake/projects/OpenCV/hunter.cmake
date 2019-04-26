@@ -419,46 +419,55 @@ hunter_add_version(
     a0c2d5944364fc4f26b6160b33c03082b1fa08c1
 )
 
+set(__hunter_opencv_args "")
+
 if(ANDROID)
   # This feature doesn't work with new CMake 3.7+ toolchains
-  set(_android_args ENABLE_PRECOMPILED_HEADERS=OFF)
-else()
-  set(_android_args "")
+  list(APPEND __hunter_opencv_args ENABLE_PRECOMPILED_HEADERS=OFF)
+elseif(UNIX)
+  list(
+      APPEND
+      __hunter_opencv_args
+      WITH_FFMPEG=ON
+      OPENCV_FFMPEG_USE_FIND_PACKAGE=ON
+  )
 endif()
 
-hunter_cmake_args(
-    OpenCV
-    CMAKE_ARGS
-        BUILD_ANDROID_EXAMPLES=OFF
-        BUILD_JAVA=OFF
-        BUILD_DOCS=OFF
-        BUILD_EXAMPLES=OFF
-        BUILD_PERF_TESTS=OFF
-        BUILD_TESTS=OFF
-        BUILD_opencv_apps=OFF
-        INSTALL_PYTHON_EXAMPLES=OFF
-        BUILD_WITH_STATIC_CRT=OFF # Fix https://github.com/ruslo/hunter/issues/177
-        ${_android_args}
-        # Find packages in Hunter (instead of building from OpenCV sources)
-        BUILD_ZLIB=OFF
-        BUILD_TIFF=OFF
-        BUILD_PNG=OFF
-        BUILD_JPEG=OFF
-        BUILD_JASPER=OFF
-        BUILD_WEBP=OFF
-        # This stuff will build shared libraries. Build with PIC required for dependencies.
-        BUILD_opencv_java=OFF
-        BUILD_opencv_python2=OFF
-        BUILD_opencv_python3=OFF
-        # There is not a CUDA package so need to stop OpenCV from searching for it, otherwise
-        #  it might pick up the host version
-        WITH_CUDA=OFF
-        WITH_CUFFT=OFF
-        # Fix for https://travis-ci.org/xsacha/hunter/jobs/347083573
-        BUILD_opencv_dnn=OFF
-        # Fix for https://travis-ci.org/ingenue/hunter/builds/452039597
-        WITH_OPENEXR=OFF
+list(
+    APPEND
+    __hunter_opencv_args
+    BUILD_ANDROID_EXAMPLES=OFF
+    BUILD_JAVA=OFF
+    BUILD_DOCS=OFF
+    BUILD_EXAMPLES=OFF
+    BUILD_PERF_TESTS=OFF
+    BUILD_TESTS=OFF
+    BUILD_opencv_apps=OFF
+    INSTALL_PYTHON_EXAMPLES=OFF
+    BUILD_WITH_STATIC_CRT=OFF # Fix https://github.com/ruslo/hunter/issues/177
+    ${_android_args}
+    # Find packages in Hunter (instead of building from OpenCV sources)
+    BUILD_ZLIB=OFF
+    BUILD_TIFF=OFF
+    BUILD_PNG=OFF
+    BUILD_JPEG=OFF
+    BUILD_JASPER=OFF
+    BUILD_WEBP=OFF
+    # This stuff will build shared libraries. Build with PIC required for dependencies.
+    BUILD_opencv_java=OFF
+    BUILD_opencv_python2=OFF
+    BUILD_opencv_python3=OFF
+    # There is not a CUDA package so need to stop OpenCV from searching for it, otherwise
+    #  it might pick up the host version
+    WITH_CUDA=OFF
+    WITH_CUFFT=OFF
+    # Fix for https://travis-ci.org/xsacha/hunter/jobs/347083573
+    BUILD_opencv_dnn=OFF
+    # Fix for https://travis-ci.org/ingenue/hunter/builds/452039597
+    WITH_OPENEXR=OFF
 )
+
+hunter_cmake_args(OpenCV CMAKE_ARGS ${__hunter_opencv_args})
 
 # Pick a download scheme
 hunter_pick_scheme(DEFAULT url_sha1_cmake)
