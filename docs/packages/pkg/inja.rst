@@ -17,4 +17,4 @@ inja
 
     hunter_add_package(inja)
     find_package(inja CONFIG REQUIRED)
-    target_link_libraries(inja inja::inja)
+    target_link_libraries(inja pantor::inja)

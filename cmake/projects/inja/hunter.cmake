@@ -20,6 +20,17 @@ hunter_add_version(
     fdf2af404917350a7d9c4f263ddf020130088444
 )
 
+hunter_add_version(
+    PACKAGE_NAME
+    inja
+    VERSION
+    2.1.0
+    URL
+    "https://github.com/pantor/inja/archive/v2.1.0.tar.gz"
+    SHA1
+    6c6d0cd253ae6258a4f453470761b33f4e3605d3
+)
+
 hunter_cmake_args(
     inja
     CMAKE_ARGS
